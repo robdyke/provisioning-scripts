@@ -9,9 +9,10 @@ usage() {
 
 PACKER_VER=1.3.3
 TERRAFORM_VER=0.11.11
+VBOX_VER=6.0
 
 install_utils() {
-  sudo apt install -y htop iotop iftop nmap tmux git vim
+  sudo apt install -y htop iotop iftop nmap tmux git vim unzip zip
 }
 
 install_vagrant() {
@@ -43,12 +44,24 @@ install_packer() {
   rm ./packer.zip ./packer
 }
 
+install_virtualbox(){
+  curl -fSsl https://www.virtualbox.org/download/oracle_vbox_2016.asc | apt-key add -
+  curl -fSsl https://www.virtualbox.org/download/oracle_vbox.asc | apt-key add -
+  add-apt-repository 'deb http://download.virtualbox.org/virtualbox/debian bionic contrib'
+  DEBIAN_FRONTEND=noninteractive sudo apt-get update
+  DEBIAN_FRONTEND=noninteractive sudo apt-get install -y build-essential gcc make linux-headers-generic linux-headers-$(uname -r) dkms
+  DEBIAN_FRONTEND=noninteractive sudo apt-get install -y virtualbox-${VBOX_VER}
+}
+
 case "$1" in
   utils)
     install_utils
     ;;
   vagrant)
     install_vagrant
+    ;;
+  vbox)
+    install_virtualbox
     ;;
   terraform)
     install_terraform
