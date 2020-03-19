@@ -1,0 +1,20 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.provider "virtualbox" do |vb|
+     # Display the VirtualBox GUI when booting the machine
+     vb.gui = true
+     vb.memory = "4096"
+  end
+$script = <<-SHELL
+   sudo apt-get update && sudo apt-get upgrade -y
+   sudo apt-get install gnupg2 -y
+   sudo apt-get install -y --no-install-recommends ubuntu-desktop
+   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+   sudo dpkg -i google-chrome-stable_current_amd64.deb
+   sudo apt-get -f -y install
+   sudo chown -R vagrant:vagrant /home/vagrant/*
+   mkdir /home/vagrant/Desktop
+sudo shutdown -h now
+SHELL
+config.vm.provision "shell", inline: $script, privileged: false
+end

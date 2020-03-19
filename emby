@@ -1,0 +1,13 @@
+docker run -d \
+    --volume programdata:/config \
+    --volume /media/2TB:/mnt/share1 \
+    --device /dev/dri:/dev/dri \
+    --publish 8096:8096 \
+    --publish 8920:8920 \
+    --env UID=1000 \
+    --env GID=100 \
+    --env GIDLIST=100 \
+    --network host
+    emby/embyserver:latest
+
+docker run -d --volume programdata:/config --device /dev/dri:/dev/dri --cpu-quota 50000 --env UID=1000 --env GID=1000 --env GIDLIST=100 --network host emby/embyserver:latest emby

@@ -9,8 +9,8 @@ set -o errexit
 # Set source URLS
 DM_BASE=https://github.com/docker/machine/releases/download/v0.16.0
 DM_BASH=https://raw.githubusercontent.com/docker/machine/v0.16.0
-DC_BASE=https://github.com/docker/compose/releases/download/1.23.1
-DC_BASH=https://raw.githubusercontent.com/docker/compose/1.23.1/contrib/completion/bash
+DC_BASE=https://github.com/docker/compose/releases/download/1.25.4
+DC_BASH=https://raw.githubusercontent.com/docker/compose/master/contrib/completion/bash/
 DK_BASH=https://raw.githubusercontent.com/docker/docker-ce
 
 # Declare functions
@@ -63,7 +63,7 @@ install_docker_engine() {
   # Docker - install
   DEBIAN_FRONTEND=noninteractive sudo -E apt-get install -y git apt-transport-https ca-certificates curl software-properties-common
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  DEBIAN_FRONTEND=noninteractive sudo add-apt-repository 'deb https://download.docker.com/linux/ubuntu xenial stable'
+  DEBIAN_FRONTEND=noninteractive sudo add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/ubuntu disco stable'
   DEBIAN_FRONTEND=noninteractive sudo -E apt-get update
   DEBIAN_FRONTEND=noninteractive sudo -E apt-get install -y docker-ce
   sudo usermod -a -G docker $USER
@@ -122,7 +122,7 @@ case "$1" in
     update_cgroup
     set_docker_engine
     disable_ipv6
-    set_docker_machine
+    # set_docker_machine
     set_docker_compose
     ;;
   *)

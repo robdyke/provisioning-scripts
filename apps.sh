@@ -19,7 +19,7 @@ install_node() {
   sudo apt-get install -y git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev software-properties-common libffi-dev nodejs yarn
   mkdir -p $HOME/Work/nodejs-packages
   echo '' >> ~/.bashrc
-  echo 'export NODE_HOME="$HOME/Work/nodejs-packages"' >> ~/.bashrc
+  echo 'export NODE_HOME="$HOME/projects/nodejs-packages"' >> ~/.bashrc
   echo 'export PATH=$PATH:$NODE_HOME/bin' >> ~/.bashrc
   node -v
   nodejs -v
@@ -27,11 +27,11 @@ install_node() {
 
 install_rbenv() {
   git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-  echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+  echo 'export PATH=$PATH:$HOME/.rbenv/bin' >> ~/.bashrc
   echo 'eval "$(rbenv init -)"' >> ~/.bashrc
   source $HOME/.bashrc
   git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
-  echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
+  echo 'export PATH=$PATH:$HOME/.rbenv/plugins/ruby-build/bin' >> ~/.bashrc
   source $HOME/.bashrc
   rbenv install 2.5.3
   rbenv global 2.5.3

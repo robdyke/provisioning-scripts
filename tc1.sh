@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage
-# ./qnapshares.sh {mount|unmount}
+# ./timecapsule.sh {mount|unmount}
 
 # Global variables
 declare SCRIPT_NAME="${0##*/}"
@@ -12,7 +12,7 @@ declare ROOT_DIR="$PWD"
 ACTION=$1
 
 # QNAP info
-declare -a QNAPVOLS=("Projects" "Archives" "Media" "Home" "Clients")
+declare -a TCVOLS=("2TB")
 
 # Checks output for non-zero exit
 checkErrors() {
@@ -20,33 +20,43 @@ checkErrors() {
         if [ "${1}" -ne "0" ]; then
                 echo "ERROR: ${1} : ${2}"
                 # as a bonus, make script exit with the right error code.
-                exit ${1}
+                # exit ${1}
         fi
 }
 
-testVols(){
-  echo "INFO: Listing QNAP vols"
-  for i in "${QNAPVOLS[@]}"
-    do echo "      Mountpoint /qnap/$i"
+usage() {
+  echo $"Usage: $0 {mount|unmount|list}"
+  echo ""
+}
+
+listVols() {
+  echo "INFO: Listing TC vols"
+  for i in "${TCVOLS[@]}"
+    do echo "Mountpoint /$HOME/TimeCapsule/$i"
     done
   }
 
 mountDestination() {
-  echo "INFO: Mounting QNAP vols"
-  for i in "${QNAPVOLS[@]}"
-    do sudo mount /qnap/$i
+  echo "INFO: Mounting TC vols"
+  for i in "${TCVOLS[@]}"
+    do sudo mount -t cifs -o vers=1.0,username=$USER,sec=ntlm,noperm //192.168.1.101/$i /$HOME/TimeCapsule/$i
       checkErrors $? "ERROR: $i did not mount correctly. Return code was: $?."
     done
 }
 
 umountDestination() {
   echo ""
-  echo "INFO: Un-mounting QNAP vols"
-  for i in "${QNAPVOLS[@]}"
-    do sudo umount /qnap/$i
+  echo "INFO: Un-mounting TC vols"
+  for i in "${TCVOLS[@]}"
+    do sudo umount /$HOME/TimeCapsule/$i
       checkErrors $? "ERROR: $i did not umount correctly. Return code was: $?."
     done
 }
+
+if [ $# -eq 0 ] ; then
+  usage
+  exit 0
+fi
 
 if [ $ACTION = mount ] ; then
         mountDestination;
@@ -56,8 +66,6 @@ if [ $ACTION = umount ] ; then
         umountDestination;
 fi
 
-# If there isn't an action, show usage
-if [ $ACTION = test ] ; then
-    testVols
-    exit 1
+if [ $ACTION = list ] ; then
+    listVols
 fi
